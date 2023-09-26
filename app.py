@@ -31,15 +31,17 @@ with open("sdxl_loras.json", "r") as file:
 
 device = "cuda" 
 
+device = "cuda" 
+
 state_dicts = {}
 
 for item in sdxl_loras_raw:
     saved_name = hf_hub_download(item["repo"], item["weights"])
     
     if not saved_name.endswith('.safetensors'):
-        state_dict = torch.load(saved_name)
+        state_dict = torch.load(saved_name, map_location=torch.device('cpu'))
     else:
-        state_dict = load_file(saved_name)
+        state_dict = load_file(saved_name, map_location=torch.device('cpu'))
     
     state_dicts[item["repo"]] = {
         "saved_name": saved_name,
